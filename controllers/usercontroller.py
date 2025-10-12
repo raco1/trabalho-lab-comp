@@ -23,3 +23,22 @@ def create(nome, email, senha, ra):
                     st.success("✅ Conta criada com sucesso!")
         except Exception as e:
             st.error(f"Erro ao criar conta: {e}")
+
+def login(user, psswd):
+    try:
+        ra = int(user)
+        conexao = getApi()
+        if conexao:
+            cursor = conexao.cursor(dictionary=True)
+            cursor.execute("SELECT * FROM users WHERE RA = %s", (ra,))
+            usuario = cursor.fetchone()
+            if not usuario:
+                st.warning("❌ Usuário e/ou senha incorretos.")
+            elif ra != usuario['RA']:
+                st.warning("❌ Usuário e/ou senha incorretos.")
+            elif psswd != usuario['senha']:
+                st.warning("❌ Usuário e/ou senha incorretos.")
+            else:
+                st.success(f"🚀 Bem-vindo {usuario['nome']}")
+    except Exception as e:
+        st.error(f"🔴 Erro ao tentar entrar: {e}")
