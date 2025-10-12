@@ -14,3 +14,10 @@ with st.form("login_form"):
                 st.success(f"🚀 Bem-vindo {user}")
     except Exception as e:
         st.error(f"🔴 Erro ao tentar entrar: {e}")
+    col1, col2, col3 = st.columns(3, vertical_alignment="center")
+    with col1:
+        st.checkbox("Lembrar de mim?", key="remember")   
+    with col2:   
+        st.page_link("pages/recover_psswd.py", label="Esqueceu a senha?", use_container_width=True)  
+    with col3:
+        st.page_link("pages/signup.py", label="Criar conta", use_container_width=True)
