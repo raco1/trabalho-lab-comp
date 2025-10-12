@@ -26,6 +26,6 @@ recover_psswd = st.Page(
     title="Recover password",
 )
 
-pg = st.navigation([login, dashboard, sign_up, appointments, recover_psswd])
+pg = st.navigation([login, dashboard, sign_up, appointments, recover_psswd], position="hidden")
 
 pg.run()
