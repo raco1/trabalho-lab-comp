@@ -1,5 +1,9 @@
 import streamlit as st
 
+from services.db import conectarBanco
+
+conectarBanco()
+
 login = st.Page(
     page="pages/login.py",
     title="Log in",
