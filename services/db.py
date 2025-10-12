@@ -25,7 +25,7 @@ def conectarBanco():
     except Error as e:
         print(f"Erro ao conectar ou criar banco: {e}")
 
-def api():
+def getApi():
     """Conecta diretamente ao banco existente."""
     try:
         conexao = mysql.connector.connect(
