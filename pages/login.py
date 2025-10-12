@@ -1,4 +1,5 @@
 import streamlit as st
+from services.db import getApi
 
 st.title("Log in ➡️")
 st.caption("Por favor, entre com seu email e senha para continuar.")
@@ -11,7 +12,20 @@ with st.form("login_form"):
             if not user or not psswd:
                 st.warning("⚠️ Preencha todos os campos!")
             else:
-                st.success(f"🚀 Bem-vindo {user}")
+                ra = int(user)
+                conexao = getApi()
+                if conexao:
+                    cursor = conexao.cursor(dictionary=True)
+                    cursor.execute("SELECT * FROM users WHERE RA = %s", (ra,))
+                    usuario = cursor.fetchone()
+                    if not usuario:
+                        st.warning("❌ Usuário e/ou senha incorretos.")
+                    elif ra != usuario['RA']:
+                        st.warning("❌ Usuário e/ou senha incorretos.")
+                    elif psswd != usuario['senha']:
+                        st.warning("❌ Usuário e/ou senha incorretos.")
+                    else:
+                        st.success(f"🚀 Bem-vindo {usuario['nome']}")
     except Exception as e:
         st.error(f"🔴 Erro ao tentar entrar: {e}")
     col1, col2, col3 = st.columns(3, vertical_alignment="center")
