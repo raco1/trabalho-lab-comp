@@ -1,7 +1,7 @@
 
 # 🔎KeyScan🔑
 
-Uma aplicação criada à partir de um projeto das aulas de Laboratório de programação competitiva, ministrada pelo professor Maxwell Gomes da Silva, com intuito de facilitar e o agendamento de laboratórios na universidade, além de automatizar o processo para pegar a chave de uma sala.
+Uma aplicação criada à partir de um projeto das aulas de Laboratório de Programação Competitiva, ministrada pelo professor Maxwell Gomes da Silva, com intuito de facilitar o agendamento de laboratórios na universidade, além de automatizar o processo para pegar a chave de um laboratório.
 
 
 ## 🔍 Índice
