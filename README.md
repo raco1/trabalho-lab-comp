@@ -11,7 +11,7 @@ Uma aplicação criada à partir de um projeto das aulas de Laboratório de prog
 
 ## 🎨 Screenshots
 
-O seguinte foi feito em conjunto durante a aula. Você pode acessar em: [drawSQL/KeyScan](https://drawsql.app/teams/raco/diagrams/keyscan)
+O seguinte diagrama foi feito em conjunto durante a aula. Você pode acessar em: [drawSQL/KeyScan](https://drawsql.app/teams/raco/diagrams/keyscan)
 
 ![diagrama](https://github.com/user-attachments/assets/8ce007b7-bbba-4706-8ad9-ec83e63d299b)
 
