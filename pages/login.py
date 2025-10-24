@@ -1,21 +1,30 @@
 import streamlit as st
-from controllers.usercontroller import login
+from database.db import getUsuario
 
 st.title("Log in ➡️")
 st.caption("Por favor, entre com seu email e senha para continuar.")
-
 with st.form("login_form"):
-    user = st.text_input("Usuário", key="user", placeholder="Usuário")
-    psswd = st.text_input("Senha", key="psswd", type="password", placeholder="Senha")
+    ra = st.text_input("Usuário", key="ra", placeholder="Usuário")
+    senha = st.text_input("Senha", key="senha", type="password", placeholder="Senha")
     if st.form_submit_button("Login", type='primary', use_container_width=True):
-        if not user or not psswd:
+        if not ra or not senha:
             st.warning("⚠️ Preencha todos os campos!")
         else:
-            login(user, psswd)
+            usuario = getUsuario(ra)
+            if not usuario:
+                st.warning("❌ Usuário ou senha incorretos.")
+            elif senha != usuario['senha']:
+                st.warning("❌ Usuário ou senha incorretos.")
+            else:
+                st.session_state.usuario = usuario
+                st.switch_page("pages/dashboard.py")
+with st.container(border=True):
     col1, col2, col3 = st.columns(3, vertical_alignment="center")
     with col1:
-        st.checkbox("Lembrar de mim?", key="remember")   
+            st.checkbox("Lembrar de mim?", key="remember")   
     with col2:   
-        st.page_link("pages/recover_psswd.py", label="Esqueceu a senha?", use_container_width=True)  
+        if st.button("Esqueceu a senha?🚨", use_container_width=True):
+            st.switch_page("pages/recover_psswd.py")
     with col3:
-        st.page_link("pages/signup.py", label="Criar conta", use_container_width=True)
+        if st.button("Cadastre-se 🆕", use_container_width=True):
+            st.switch_page("pages/signup.py")
