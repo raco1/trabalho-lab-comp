@@ -1,5 +1,4 @@
 import streamlit as st
-
 from database.db import conectarBanco
 
 conectarBanco() # Verifica se o banco está conectado/funcionando.
@@ -25,11 +24,16 @@ agendamentos = st.Page(
     title="Agendamentos",
 )
 
+solicitacao = st.Page(
+    page="pages/solicitacao.py",
+    title="Solicitação Urgente",
+)
+
 recover_psswd = st.Page(
     page="pages/recover_psswd.py",
     title="Recover password",
 )
 
-pg = st.navigation([login, dashboard, sign_up, agendamentos, recover_psswd], position="hidden")
+pg = st.navigation([login, dashboard, sign_up, agendamentos, solicitacao, recover_psswd], position="hidden")
 
 pg.run()
