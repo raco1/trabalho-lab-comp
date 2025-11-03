@@ -1,8 +1,13 @@
 import time
 import streamlit as st
 from database.db import iniciarConexao
+from streamlit_local_storage import LocalStorage
 
-if 'usuario' not in st.session_state or st.session_state.usuario == None: #tratativa para não ser possível criar uma conta já estando logado no app
+localS = LocalStorage()
+
+usuario = localS.getItem("usuario")
+
+if not usuario: #tratativa para não ser possível criar uma conta já estando logado no app
     st.title('Criar conta 🆕')
     with st.form('create_acc_form'):
         nome = st.text_input("Nome", key='name', placeholder="Pedro Alves")

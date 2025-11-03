@@ -107,7 +107,6 @@ else:
         opcoes = [f"Sala {row['sala']} - Dia {row['data']} - Horário: {row['inicio']}-{row['fim']}" for _, row in agendamentos_marcados.iterrows()]
         selecionado = st.selectbox("🔍 Selecione um agendamento para ver detalhes:", opcoes)
         agora = datetime.now() # data e hora atuais
-        print(agendamentos_marcados)
         if selecionado:
                 indice = opcoes.index(selecionado)
                 agendamento = agendamentos_marcados.iloc[indice]
