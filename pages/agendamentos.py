@@ -1,10 +1,12 @@
-import streamlit as st
 import time
-from datetime import date, datetime, timedelta
+import streamlit as st
 from database.db import iniciarConexao
+from datetime import date, datetime, timedelta
+from streamlit_local_storage import LocalStorage
 
-if 'usuario' not in st.session_state or st.session_state.usuario == None: #Caso não tenha usuário logado, retornar à pagina de login.
-    st.switch_page("pages/login.py")
+localS = LocalStorage()
+
+usuario = localS.getItem("usuario")
 
 st.title("Solicitar agendamento de sala 🛠️")
 
@@ -67,12 +69,11 @@ try:
                     break
 
             if horario_selecionado and st.button("📅 Agendar horário!", width="stretch"): #Caso o usuario tenha selecionado tudo certinho, executa o insert na tabela de agendamentos com os dados que ele selecinou.
-                cursor.execute("INSERT INTO agendamentos (user_id, key_id, data_agendamento, horario_id, created_at) VALUES (%s, %s, %s, %s, %s)", (st.session_state.usuario["id"], sala_selecionada['id'], select_date, horario_selecionado['horario_id'], datetime.now()))
+                cursor.execute("INSERT INTO agendamentos (user_id, key_id, data_agendamento, horario_id, created_at) VALUES (%s, %s, %s, %s, %s)", (usuario["id"], sala_selecionada['id'], select_date, horario_selecionado['horario_id'], datetime.now()))
                 conn.commit() #da commit no banco
                 cursor.close() #fecha o cursor
                 conn.close() #encerra a conexao com o banco
                 placeholder = st.empty()
-                time.sleep(0.5)
                 placeholder.progress(0, "Iniciando agendamento...")
                 time.sleep(1)
                 placeholder.progress(30, "Confirmando a sala...")
