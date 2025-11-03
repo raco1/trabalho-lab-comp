@@ -16,6 +16,20 @@ if not usuario: #Caso não tenha usuário logado, retornar à pagina de login.
 
 conn = iniciarConexao()
 cursor = conn.cursor(dictionary=True)
+
+def remover_cancelados_antigos(cursor, conn):
+    """
+    Remove agendamentos com status 'cancelado' com mais de 2 dias.
+    """
+    dois_dias_atras = datetime.now() - timedelta(days=2) # pega o dia de hoje - 2 dias
+    
+    cursor.execute(
+        "DELETE FROM agendamentos WHERE status = 'cancelado' AND data_agendamento <= %s",
+        (dois_dias_atras,)
+    )
+    conn.commit()
+
+remover_cancelados_antigos(cursor, conn) # sempre que a pagina dashboard for carregada, os agendamentos cancelados mais antigos que 2 dias não irão aparecer na tabela para evitar poluição
 cursor.execute("SELECT * from agendamentos WHERE user_id = %s", (usuario['id'],)) # busca todos os agendamentos com o id do usuario logado na sessao
 agendamentos = cursor.fetchall()
 
@@ -91,6 +105,7 @@ else:
         "status": status
         })
 
+
         st.dataframe(
             agendamentos_marcados, #configuramos as colunas
             column_config={
@@ -110,7 +125,6 @@ else:
         if selecionado:
                 indice = opcoes.index(selecionado)
                 agendamento = agendamentos_marcados.iloc[indice]
-
                 detalhe = st.expander("📄 Detalhes do agendamento selecionado serão exibidos aqui:", expanded=True)
                 with detalhe:
                     st.markdown(f"### 🏫 Sala {agendamento['sala']}")
