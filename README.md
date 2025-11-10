@@ -18,26 +18,32 @@ Uma aplicação criada à partir de um projeto das aulas de Laboratório de prog
 ![diagrama](https://github.com/user-attachments/assets/1cf64e71-9d6d-4ecb-b9b7-706a69d929b0)
 
 - Tela de cadastro de usuários:
-
+  
+![signup](https://github.com/user-attachments/assets/07f270d8-fdd3-4722-9f5c-36daf8bf5513)
 
 
 - Tela de login:
-
+  
+![login](https://github.com/user-attachments/assets/1a5bc887-1df9-4890-bfea-0aac9707be44)
 
 
 - Tela de dashboard quando não há um agendamento ativo:
-
+  
+![dashboard](https://github.com/user-attachments/assets/adda8802-7830-4c2d-9285-151af33917c4)
 
 
 - Tela de dashboard quando há um agendamento ativo:
-
+  
+![ativo](https://github.com/user-attachments/assets/b1af0cb0-fa11-4127-8224-82527d3cf238)
 
 
 - Tela de solicitação de agendamento:
-
-
+  
+![urgnt](https://github.com/user-attachments/assets/eac76289-5689-4ad6-aa23-39c4147d9def)
 
 - Tela de solicitação de agendamento urgente:
+
+![agend](https://github.com/user-attachments/assets/e895368a-a2a4-4793-ab4a-b6546d4a9722)
 
 
 ## Funcionalidades
