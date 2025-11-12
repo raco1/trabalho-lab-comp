@@ -1,3 +1,4 @@
+import json
 import time
 import streamlit as st
 from database.db import getUsuario
@@ -5,9 +6,6 @@ from streamlit_local_storage import LocalStorage
 
 st.title("Log in ➡️")
 st.caption("Por favor, entre com seu email e senha para continuar.")
-
-if "login_failed" not in st.session_state:
-    st.session_state.login_failed = False
 
 with st.form("login_form"):
     ra = st.text_input("Usuário", key="ra", placeholder="Usuário")
@@ -29,8 +27,7 @@ with st.form("login_form"):
             else:
                 localS = LocalStorage()
                 localS.setItem("usuario", usuario)
-                st.session_state.login_failed = False
-                time.sleep(1)
+                time.sleep(2)
                 st.switch_page("pages/dashboard.py")
 with st.container(border=True):
     col1, col2, col3 = st.columns(3, vertical_alignment="center")

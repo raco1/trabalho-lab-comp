@@ -30,6 +30,7 @@ def remover_cancelados_antigos(cursor, conn):
     conn.commit()
 
 remover_cancelados_antigos(cursor, conn) # sempre que a pagina dashboard for carregada, os agendamentos cancelados mais antigos que 2 dias não irão aparecer na tabela para evitar poluição
+
 cursor.execute("SELECT * from agendamentos WHERE user_id = %s", (usuario['id'],)) # busca todos os agendamentos com o id do usuario logado na sessao
 agendamentos = cursor.fetchall()
 
@@ -53,7 +54,7 @@ for agendamento in agendamentos:
     #no caso do usuario com id = 1, ele está retornando essa lista status = ['🟡 Pendente', '🟡 Pendente']
 
 
-#pra ficar mais visivel, esse é o retorno de st.write(st.session_state.usuario)
+#pra ficar mais visivel, esse é o retorno de st.write(usuario)
 #{
 #    "id":1
 #    "ra":"123456"
@@ -121,7 +122,7 @@ else:
 
         opcoes = [f"Sala {row['sala']} - Dia {row['data']} - Horário: {row['inicio']}-{row['fim']}" for _, row in agendamentos_marcados.iterrows()]
         selecionado = st.selectbox("🔍 Selecione um agendamento para ver detalhes:", opcoes)
-        agora = datetime.now() # data e hora atuais
+        
         if selecionado:
                 indice = opcoes.index(selecionado)
                 agendamento = agendamentos_marcados.iloc[indice]
@@ -146,6 +147,7 @@ else:
                             if st.button("⚠️ Cancelar agendamento ⚠️", type="primary"):
                                 cancelarAgendamento()
 
+                    agora = datetime.now() # data e hora atuais
                     data_ag = datetime.strptime(agendamento['data'], "%d/%m/%y").date() # converte a data e horário do agendamento para datetime completo
                     hora_inicio = datetime.strptime(agendamento['inicio'], "%H:%M").time()
                     inicio_agendamento = datetime.combine(data_ag, hora_inicio) # cria um datetime completo para o horário de início

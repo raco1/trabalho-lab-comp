@@ -53,31 +53,43 @@ try:
         """, (sala_selecionada['id'], select_date)) # Essa lógica busca os ids dos horarios disponiveis relacionados à sala que vc selecionou.
         horarios = cursor.fetchall()
 
-        if horarios:
-            agora = datetime.now().time()  # horário atual (ex: 08:35)
-            horarios_validos = []
+        cursor.execute("""
+            SELECT h.start_at, h.end_at
+            FROM agendamentos a
+            JOIN horarios h ON a.horario_id = h.id
+            WHERE a.key_id = %s
+            AND a.data_agendamento = %s
+            AND a.status = 'ativo'
+            ORDER BY h.end_at DESC
+            LIMIT 1;
+        """, (sala_selecionada['id'], select_date)) #  Buscar último agendamento ativo da sala (para saber qual foi o último horário usado)
+        ultimo_agendamento = cursor.fetchone()
 
-            for h in horarios: # filtrar apenas horários que ainda não começaram
-                hora_inicio = datetime.strptime(h["start_at"], "%H:%M").time()
-                if hora_inicio > agora:
-                    horarios_validos.append(h)
-
-            def ordenar_por_horario(horario): # ordenar a lista de horários válidos pelo horário de início
-                return horario["start_at"]
-
-            horarios_validos = sorted(horarios_validos, key=ordenar_por_horario)
-
-            if len(horarios_validos) > 0: # pegar o primeiro horário futuro (o mais próximo)
-                proximo_horario = horarios_validos[0]
-            else:
-                proximo_horario = None
+        # Determinar o próximo horário possível
+        proximo_horario = None
+        if ultimo_agendamento:
+            hora_final_ultimo = datetime.strptime(ultimo_agendamento["end_at"], "%H:%M").time()
+            for h in horarios:
+                inicio = datetime.strptime(h["start_at"], "%H:%M").time()
+                if inicio > hora_final_ultimo:
+                    proximo_horario = h
+                    break
+        else:
+            # Caso não tenha agendamento anterior, pega o primeiro horário do dia
+            proximo_horario = horarios[0] if horarios else None
 
             if proximo_horario: # exibir e permitir o agendamento
+                agora = datetime.now()
+                inicio_datetime = datetime.combine(today, datetime.strptime(proximo_horario["start_at"], "%H:%M").time())
+                diferenca = inicio_datetime - agora
                 with st.container(border=True):
                     st.subheader(f"📅 Próximo horário disponível ({select_date_formatado}):")
                     st.info(f"{proximo_horario['start_at']} - {proximo_horario['end_at']}")
+                    confirmar = False
                     #daqui pra baixo é a mesma lógica em dashboard.py para iniciar uma aula, com a diferença que o commit abaixo, INSERE um novo agendamento ao invés de dar um UPDATE em um agendamento ja existente
-                    confirmar = st.button("📅 Scanear QrCode para começar aula!", use_container_width=True)
+                    if diferenca <= timedelta(minutes=20):
+                        confirmar = st.button("📅 Scanear QrCode para começar aula!", use_container_width=True)
+
                     if "mostrar_camera" not in st.session_state:
                         st.session_state["mostrar_camera"] = False
 
@@ -112,8 +124,11 @@ try:
                                 st.switch_page("pages/dashboard.py")
                         else:
                             st.warning("⚠️ Nenhum QR Code detectado.")    
+                    else:
+                        minutos_faltando = int(diferenca.total_seconds() // 60)
+                        st.warning(f"⏳ Só será possível agendar este horário quando faltar 20 minutos para o início da aula (faltam {minutos_faltando} minutos).")
             else:
-                st.warning("⚠️ Nenhum horário futuro disponível para hoje.")
+                st.warning("⚠️ Nenhum horário disponível após o último agendamento de hoje.")
 
     else:
         st.info("Por favor, selecione uma sala.")
