@@ -1,5 +1,6 @@
 streamlit
 pandas
-pymysql
 dotenv
 streamlit-local-storage
+mysql-connector-python
+opencv-python
